@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/drawable/image_fade.xml" value="0.2985" />
-        <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/layout/activity_filter_image.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/layout/activity_filter_image.xml" value="0.2" />
         <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/layout/item.xml" value="0.25" />
+        <entry key="..\:/Users/uSER/AndroidStudioProjects/editor/app/src/main/res/layout/layout_blog_list_item.xml" value="0.18541666666666667" />
       </map>
     </option>
   </component>
