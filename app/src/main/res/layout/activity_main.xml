@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome_page_background"
+    tools:context=".MainActivity">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/image_fade" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/logoWidth"
+        android:layout_height="@dimen/logoHeight"
+        android:layout_marginTop="@dimen/logoMarginTop"
+        android:background="@color/transparentColor"
+        android:src="@drawable/vsco_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/defaultMargin">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/savedImagesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/savedImagesButton"
+            android:padding="@dimen/defaultPadding"
+            android:text="@string/saved_images"
+            app:cornerRadius="@dimen/cornerRadius"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <Space
+            android:id="@+id/buttonSpacer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/savedImagesButton"
+            app:layout_constraintTop_toBottomOf="@id/editImageButton" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/editImageButton"
+            android:padding="@dimen/defaultPadding"
+            android:text="@string/edit_new_image"
+            app:cornerRadius="@dimen/cornerRadius"
+            app:layout_constraintBottom_toTopOf="@id/editImageButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/underTitleContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/doubleMargin"
+            android:text="@string/let_s_create_something_new"
+            android:textColor="@color/white"
+            android:textSize="@dimen/descriptionSize"
+            app:layout_constraintBottom_toTopOf="@id/editImageButton"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/image_filters"
+            android:textColor="@color/white"
+            android:textSize="@dimen/titleSize"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/underTitleContent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

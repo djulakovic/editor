@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="logoWidth">100dp</dimen>
+    <dimen name="logoHeight">100dp</dimen>
+    <dimen name="defaultPadding">15dp</dimen>
+    <dimen name="defaultMargin">20dp</dimen>
+    <dimen name="doubleMargin">40dp</dimen>
+    <dimen name="titleSize">30sp</dimen>
+    <dimen name="descriptionSize">20sp</dimen>
+    <dimen name="logoMarginTop">100dp</dimen>
+    <dimen name="cornerRadius">20dp</dimen>
+</resources>

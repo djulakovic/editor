@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">editor</string>
+    <string name="saved_images">saved images</string>
+    <string name="edit_new_image">edit new image</string>
+    <string name="let_s_create_something_new">Let\'s create something new.</string>
+    <string name="image_filters">Image Filters</string>
+    <string name="permissions">Local storage permission is denied.</string>
+</resources>
