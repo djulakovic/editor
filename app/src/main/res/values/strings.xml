@@ -4,5 +4,11 @@
     <string name="edit_new_image">edit new image</string>
     <string name="let_s_create_something_new">Let\'s create something new.</string>
     <string name="image_filters">Image Filters</string>
+    <string name="originalFilter">Original</string>
+    <string name="starLitFiler">Star Lit</string>
+    <string name="blueMessFilter">Blue Mess</string>
+    <string name="stuckVibeFilter">Struck Vibe</string>
+    <string name="limeStutterFilter">Lime Stutter</string>
+    <string name="nightWhisperFilter">Night Whisper</string>
     <string name="permissions">Local storage permission is denied.</string>
 </resources>

@@ -12,8 +12,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zomato.photofilters.SampleFilters
+import com.zomato.photofilters.imageprocessors.Filter
+
 
 class FilterImageActivity : AppCompatActivity() {
+
+    init {
+        System.loadLibrary("NativeImageProcessor")
+    }
 
     private val itemsList = ArrayList<FilterModel>()
     private lateinit var customAdapter: CustomAdapter
@@ -35,12 +42,8 @@ class FilterImageActivity : AppCompatActivity() {
     }
 
     private fun initRecycleView() {
-        customAdapter = CustomAdapter(itemsList)
-        val layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+        customAdapter = CustomAdapter(itemsList,imageView)
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = customAdapter
     }
@@ -69,11 +72,7 @@ class FilterImageActivity : AppCompatActivity() {
         startActivityForResult(intent, imagePickCode)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             permissionCode -> {
@@ -86,18 +85,20 @@ class FilterImageActivity : AppCompatActivity() {
         }
     }
 
+    private fun fillImageFilters(data: Intent?){
+        data?.data?.let { FilterModel(it, R.string.originalFilter, Filter()) }?.let { itemsList.add(it) }
+        data?.data?.let { FilterModel(it, R.string.starLitFiler, SampleFilters.getStarLitFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let { FilterModel(it, R.string.blueMessFilter, SampleFilters.getBlueMessFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let { FilterModel(it, R.string.stuckVibeFilter, SampleFilters.getAweStruckVibeFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let { FilterModel(it, R.string.limeStutterFilter, SampleFilters.getLimeStutterFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let { FilterModel(it, R.string.nightWhisperFilter, SampleFilters.getNightWhisperFilter()) }?.let { itemsList.add(it) }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == imagePickCode) {
-            imageView.setImageURI(data?.data)
-
-            //TODO izmeni ovo ispod
-            data?.data?.let { FilterModel(it, "Filter 1") }?.let { itemsList.add(it) }
-            data?.data?.let { FilterModel(it, "Filter 2") }?.let { itemsList.add(it) }
-            data?.data?.let { FilterModel(it, "Filter 3") }?.let { itemsList.add(it) }
-            data?.data?.let { FilterModel(it, "Filter 4") }?.let { itemsList.add(it) }
-            data?.data?.let { FilterModel(it, "Filter 5") }?.let { itemsList.add(it) }
-
+        if (resultCode == Activity.RESULT_OK && requestCode == imagePickCode && data != null) {
+            imageView.setImageURI(data.data)
+            fillImageFilters(data)
             customAdapter.notifyDataSetChanged()
         }
     }
