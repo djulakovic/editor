@@ -11,4 +11,5 @@
     <string name="limeStutterFilter">Lime Stutter</string>
     <string name="nightWhisperFilter">Night Whisper</string>
     <string name="permissions">Local storage permission is denied.</string>
+    <string name="save">Save</string>
 </resources>
