@@ -1,4 +1,4 @@
-package com.example.editor
+package com.example.editor.adapters
 
 import FilterModel
 import android.graphics.Bitmap
@@ -11,13 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.example.editor.R
 import com.zomato.photofilters.imageprocessors.Filter
 
-internal class CustomAdapter(
+internal class FiltersAdapter(
     private var itemsList: List<FilterModel>,
     private var imageView: ImageView
 ) :
-    RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<FiltersAdapter.MyViewHolder>() {
     internal inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var itemImageView: ImageView = view.findViewById(R.id.itemImageView)
         var itemTitleView: TextView = view.findViewById(R.id.itemTitleView)
@@ -25,7 +26,7 @@ internal class CustomAdapter(
 
     @NonNull
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.single_filter, parent, false)
         return MyViewHolder(itemView)
     }
 

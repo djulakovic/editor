@@ -1,10 +1,10 @@
-package com.example.editor
+package com.example.editor.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
+import com.example.editor.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,11 +26,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun initClickListeners() {
         editNewImageButton.setOnClickListener { editNewImageButtonAction() };
-        savedImagesButton.setOnClickListener { editNewImageButtonAction() }
+        savedImagesButton.setOnClickListener { savedImagesButtonAction() }
     }
 
     private fun editNewImageButtonAction() {
         val intent = Intent(this@MainActivity, FilterImageActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun savedImagesButtonAction() {
+        val intent = Intent(this@MainActivity, SavedImagesActivity::class.java)
         startActivity(intent)
     }
 }

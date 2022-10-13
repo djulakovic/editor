@@ -1,4 +1,4 @@
-package com.example.editor
+package com.example.editor.activities
 
 import FilterModel
 import android.Manifest
@@ -20,6 +20,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.editor.adapters.FiltersAdapter
+import com.example.editor.R
+import com.example.editor.helpers.StaticText
 import com.zomato.photofilters.SampleFilters
 import com.zomato.photofilters.imageprocessors.Filter
 import java.io.File
@@ -28,6 +31,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FilterImageActivity : AppCompatActivity() {
@@ -37,7 +41,7 @@ class FilterImageActivity : AppCompatActivity() {
     }
 
     private val itemsList = ArrayList<FilterModel>()
-    private lateinit var customAdapter: CustomAdapter
+    private lateinit var customAdapter: FiltersAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageView: ImageView;
 
@@ -47,9 +51,7 @@ class FilterImageActivity : AppCompatActivity() {
     private val permissionCode = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.title = "Filters"
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.DKGRAY))
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        editActionBar()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filter_image)
         fetchViewChildren()
@@ -62,10 +64,7 @@ class FilterImageActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -109,18 +108,31 @@ class FilterImageActivity : AppCompatActivity() {
     private fun fillImageFilters(data: Intent?) {
         data?.data?.let { FilterModel(it, R.string.originalFilter, Filter()) }?.let { itemsList.add(it) }
         data?.data?.let { FilterModel(it, R.string.starLitFiler, SampleFilters.getStarLitFilter()) }?.let { itemsList.add(it) }
-        data?.data?.let { FilterModel(it, R.string.blueMessFilter, SampleFilters.getBlueMessFilter()) }?.let { itemsList.add(it) }
-        data?.data?.let { FilterModel(it, R.string.stuckVibeFilter, SampleFilters.getAweStruckVibeFilter()) }?.let { itemsList.add(it) }
-        data?.data?.let { FilterModel(it, R.string.limeStutterFilter, SampleFilters.getLimeStutterFilter()) }?.let { itemsList.add(it) }
-        data?.data?.let { FilterModel(it, R.string.nightWhisperFilter, SampleFilters.getNightWhisperFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let {FilterModel(it, R.string.blueMessFilter, SampleFilters.getBlueMessFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let {FilterModel(it, R.string.stuckVibeFilter, SampleFilters.getAweStruckVibeFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let {FilterModel(it, R.string.limeStutterFilter, SampleFilters.getLimeStutterFilter()) }?.let { itemsList.add(it) }
+        data?.data?.let {FilterModel(it, R.string.nightWhisperFilter, SampleFilters.getNightWhisperFilter()) }?.let { itemsList.add(it) }
     }
 
     private fun getDisc(): File {
         val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        return File(file, "filters")
+        return File(file, StaticText.albumName)
     }
 
     private fun saveImage(drawable: Drawable) {
+        val newFile = getFileFromDrawable()
+        saveFileToSharedPreferences(newFile)
+
+        try {
+            saveImageToGallery(drawable, newFile)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getFileFromDrawable(): File {
         val file = getDisc()
 
         if (!file.exists() && !file.mkdirs()) {
@@ -131,26 +143,42 @@ class FilterImageActivity : AppCompatActivity() {
         val date = simpleDateFormat.format(Date())
         val name = "IMG$date.jpg"
         val fileName = file.absolutePath + "/" + name
-        val newFile = File(fileName)
+        return File(fileName)
+    }
 
-        try {
-            val draw = drawable as BitmapDrawable
-            val bitmap = draw.bitmap
-            val fileOutPutStream = FileOutputStream(newFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutPutStream)
-            Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show()
-            fileOutPutStream.flush()
-            fileOutPutStream.close()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+    private fun saveImageToGallery(drawable: Drawable, newFile: File) {
+        val draw = drawable as BitmapDrawable
+        val bitmap = draw.bitmap
+        val fileOutPutStream = FileOutputStream(newFile)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutPutStream)
+        Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show()
+        fileOutPutStream.flush()
+        fileOutPutStream.close()
+        finish()
+    }
 
+    private fun saveFileToSharedPreferences(newFile: File) {
+        var numberOfSavedImages: Int = getNumberOfSavedImages()
+        numberOfSavedImages++
+        saveStringToSharedPreferences(newFile.absolutePath, StaticText.sharedPreferencesImage + numberOfSavedImages)
+        saveStringToSharedPreferences(numberOfSavedImages.toString(), StaticText.sharedPreferencesNumberOfSavedImages)
+    }
+
+    private fun saveStringToSharedPreferences(path: String, field: String) {
+        val sharedPreferences = getSharedPreferences(StaticText.sharedPreferencesName, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(field, path)
+        editor.apply()
+    }
+
+    private fun getNumberOfSavedImages(): Int {
+        val sharedPreferences = getSharedPreferences(StaticText.sharedPreferencesName, MODE_PRIVATE)
+        val numberOfSavedImages = sharedPreferences.getString(StaticText.sharedPreferencesNumberOfSavedImages, "0")
+        return numberOfSavedImages?.toInt() ?: 0
     }
 
     private fun initRecycleView() {
-        customAdapter = CustomAdapter(itemsList, imageView)
+        customAdapter = FiltersAdapter(itemsList, imageView)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = customAdapter
@@ -178,5 +206,11 @@ class FilterImageActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = intentType
         startActivityForResult(intent, imagePickCode)
+    }
+
+    private fun editActionBar() {
+        supportActionBar?.title = "Filters"
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.DKGRAY))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
     }
 }
